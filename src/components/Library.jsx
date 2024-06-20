@@ -27,22 +27,24 @@ export default function Library() {
         </div>
       </div>
       {/* Adding PlayList */}
-      <div className="bg-zinc-600		 w-full mt-10 p-4 rounded">
-        <h3 className="text-white">Create your first playlist</h3>
-        <p className="text-neutral-400	text-xs	mt-3 mb-7">
+      <div className="bg-zinc-600	w-full lg:mt-6 md:mt-2 p-4 rounded">
+        <h3 className="text-white md:text-sm">Create your first playlist</h3>
+        <p className="text-neutral-400	text-xs	mt-3 lg:mb-5">
           It&apos;s easy we will help you
         </p>
-        <button className="mt-4 bg-white p-2 rounded-full	text-sm	">
+        <button className="md:mt-3 lg:mt-4  bg-white p-2 rounded-full md:text-xs	text-sm	">
           Create Playlist
         </button>
       </div>
       {/* Adding PlayList */}
-      <div className="bg-zinc-600	w-full mt-10 p-4 rounded">
-        <h3 className="text-white">Let&apos;s find some podcasts to follow</h3>
-        <p className="text-neutral-400	text-xs	mt-3 mb-7">
+      <div className="bg-zinc-600	w-full lg:mt-4 md:mt-2 p-4 rounded">
+        <h3 className="text-white md:text-sm">
+          Let&apos;s find some podcasts to follow
+        </h3>
+        <p className="text-neutral-400	text-xs	mt-3 lg:mb-5">
           We&apos;ll keep you updated on new episodes
         </p>
-        <button className="mt-4 bg-white p-2 rounded-full	text-sm	">
+        <button className="md:mt-4 lg:mt-4  bg-white p-2 rounded-full md:text-xs text-sm	">
           Browse Podcasts
         </button>
       </div>

@@ -1,13 +1,16 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as all from "@fortawesome/free-solid-svg-icons";
 import styles from "./componentsModules/SubNavigation.module.css";
+import { useMainContext } from "../contexts/MainContext";
+
 function SubNavigation() {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState("");
   const [startScrollLeft, setStartScrollLeft] = useState("");
   const wrapper = useRef();
-
+  const { languages } = useMainContext();
   // HandlDraging
   function handleDragging(e) {
     if (!isDragging) return;
@@ -54,8 +57,8 @@ function SubNavigation() {
           onMouseDown={(e) => handleStartDragging(e)}
           ref={wrapper}
         >
-          {Array.from({ length: 20 }).map((_, i) => (
-            <Button key={i} />
+          {languages?.map((l, i) => (
+            <Button lang={l.native} key={i} />
           ))}
         </div>
         {/* Perimum & App Installation & User Profile */}
@@ -75,12 +78,12 @@ function SubNavigation() {
   );
 }
 
-function Button() {
+function Button({ lang }) {
   return (
     <button
       className={` text-white border-2 border-white border-solid p-2 font-bold w-[150px] select-none`}
     >
-      العربية
+      {lang}
     </button>
   );
 }

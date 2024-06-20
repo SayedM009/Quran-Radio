@@ -13,22 +13,11 @@ import Navigations from "./components/HomeNavigations";
 import Library from "./components/Library";
 import Player from "./components/Player";
 import Channels from "./components/Channels";
+import { MainProvider } from "./contexts/MainContext";
 
 function App() {
   const [languages, setLanguages] = useState([]);
   const [language, setLanguage] = useState("");
-
-  //   Get Languages
-  useEffect(() => {
-    const Quran = async function () {
-      const res = await fetch("https://mp3quran.net/api/v3/languages");
-      const data = await res.json();
-      const { language } = data;
-      //   const langs = language.map((l) => l.native);
-      setLanguages(language);
-    };
-    Quran();
-  }, []);
 
   useEffect(() => {
     if (!language) return;
@@ -49,10 +38,12 @@ function App() {
       {/* {languages.map((language, i) => (
         <Language lang={language.native} selectLang={setLanguage} key={i} />
       ))} */}
-      <Navigations />
-      <Channels />
-      <Library />
-      <Player />
+      <MainProvider>
+        <Navigations />
+        <Channels />
+        <Library />
+        <Player />
+      </MainProvider>
     </div>
   );
 }
