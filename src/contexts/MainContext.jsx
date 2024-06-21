@@ -7,6 +7,9 @@ const MainContext = createContext();
 const initialValue = {
   languages: [],
   language: "",
+  isLoading: false,
+  isError: false,
+  errorMessage: "",
 };
 
 function reducer(state, action) {
@@ -15,29 +18,57 @@ function reducer(state, action) {
       return { ...state, languages: action.payload };
     case "setLang":
       return { ...state, language: action.payload };
+    case "setSpinnerStatus":
+      return { ...state, isLoading: action.payload };
+    case "setErrorMsg":
+      return { ...state, isError: true, errorMessage: action.payload };
+    case "disableErrorMessage":
+      return { ...state, isError: false, errorMessage: "" };
   }
 }
 
 function MainProvider({ children }) {
-  const [{ languages, language }, dispatch] = useReducer(reducer, initialValue);
+  const [{ languages, language, isLoading, isError, errorMessage }, dispatch] =
+    useReducer(reducer, initialValue);
   //   Get Languages
   useEffect(() => {
+    // Enable Loading Spinner
+    dispatch({ type: "setSpinnerStatus", payload: true });
     const Quran = async function () {
-      const res = await fetch("https://mp3quran.net/api/v3/languages");
-      const data = await res.json();
-      const { language } = data;
-      dispatch({ type: "setLangs", payload: language });
+      try {
+        const res = await fetch("https://mp3quran.net/api/v3/languages");
+        if (!res.ok) throw new Error("Something Went Wrong");
+        const data = await res.json();
+        const { language } = data;
+        dispatch({ type: "setLangs", payload: language });
+      } catch (error) {
+        // Enable Error Popup
+        dispatch({ type: "setErrorMsg", payload: error });
+      } finally {
+        // Disable Loading Spinner
+        dispatch({ type: "setSpinnerStatus", payload: false });
+        // Disable Error Popup
+        dispatch({ type: "disableErrorMessage" });
+      }
     };
     Quran();
   }, []);
   return (
-    <MainContext.Provider value={(languages, language)}>
+    <MainContext.Provider
+      value={{
+        languages,
+        language,
+        isLoading,
+        isError,
+        errorMessage,
+        dispatch,
+      }}
+    >
       {children}
     </MainContext.Provider>
   );
 }
 
-console.log(MainContext);
 function useMainContext() {
   const context = useContext(MainContext);
   if (context === "undefind")

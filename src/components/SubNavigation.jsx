@@ -1,16 +1,20 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from "react";
+import { useMainContext } from "../contexts/MainContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as all from "@fortawesome/free-solid-svg-icons";
 import styles from "./componentsModules/SubNavigation.module.css";
-import { useMainContext } from "../contexts/MainContext";
+import Spinner from "./Spinner";
 
 function SubNavigation() {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState("");
   const [startScrollLeft, setStartScrollLeft] = useState("");
   const wrapper = useRef();
-  const { languages } = useMainContext();
+
+  // Main Context
+  const { languages, isLoading } = useMainContext();
+
   // HandlDraging
   function handleDragging(e) {
     if (!isDragging) return;
@@ -23,7 +27,7 @@ function SubNavigation() {
     setStartScrollLeft(wrapper.current.scrollLeft);
   }
 
-  // HandlStoping
+  // Handle Stop Grapping
   function handlStopping() {
     setIsDragging(false);
   }
@@ -33,7 +37,7 @@ function SubNavigation() {
 
   return (
     <>
-      <div className=" mx-5 mt-5 flex items-center justify-between">
+      <div className=" mx-5 mt-5 flex items-center justify-between lg:h-[60px]">
         {/* Back & Forward */}
         <div className="flex gap-2">
           <span
@@ -57,6 +61,7 @@ function SubNavigation() {
           onMouseDown={(e) => handleStartDragging(e)}
           ref={wrapper}
         >
+          {isLoading && <Spinner />}
           {languages?.map((l, i) => (
             <Button lang={l.native} key={i} />
           ))}
@@ -79,9 +84,23 @@ function SubNavigation() {
 }
 
 function Button({ lang }) {
+  // Main Context
+  const { language, dispatch } = useMainContext();
+
+  // Handle Choosing Language
+  function handleChoosingLanguage() {
+    dispatch({ type: "setLang", payload: lang });
+  }
+
   return (
     <button
-      className={` text-white border-2 border-white border-solid p-2 font-bold w-[150px] select-none`}
+      className={`${
+        styles.btn
+      } text-white border-2 border-white border-solid p-2 font-bold w-[150px] select-none ${
+        language === lang ? styles.selected : ""
+      }`}
+      onClick={handleChoosingLanguage}
+      title={lang}
     >
       {lang}
     </button>

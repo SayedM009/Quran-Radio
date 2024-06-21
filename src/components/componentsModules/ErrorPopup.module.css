@@ -1,0 +1,13 @@
+.errorIn {
+  right: 30px;
+  animation: moveToLeft 1s ease-in-out forwards;
+}
+
+@keyframes moveToLeft {
+  0% {
+    right: -100%;
+  }
+  100% {
+    right: 30px;
+  }
+}
