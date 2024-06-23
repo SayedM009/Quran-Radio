@@ -3,7 +3,7 @@ import * as all from "@fortawesome/free-solid-svg-icons";
 
 export default function Library() {
   return (
-    <div className="bg-zinc-700	 col-span-1  row-span-6 rounded-xl px-3 py-5 ">
+    <div className="bg-zinc-700	 col-span-1  row-span-6 rounded-xl px-3 py-5 hidden md:block">
       <div className="flex justify-between w-full">
         <div className="flex align-center">
           <FontAwesomeIcon

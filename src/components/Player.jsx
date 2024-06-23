@@ -1,18 +1,41 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as all from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useMainContext } from "../contexts/MainContext";
 
 export default function Player() {
-  const [played, setPlayed] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const { selectedChannelVoiceValues } = useMainContext();
+  const [value, setValue] = useState("");
+
+  useEffect(() => {
+    setValue(selectedChannelVoiceValues);
+  }, [selectedChannelVoiceValues]);
+
+  const audioRef = useRef(null);
+
+  // const togglePlayPause = () => {
+  //   if (isPlaying) {
+  //     audioRef.current.pause();
+  //   } else {
+  //     audioRef.current.play();
+  //   }
+  //   setIsPlaying(!isPlaying);
+  // };
 
   // Handle Playing
   function handlePlaying() {
-    setPlayed(!played);
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
   }
   return (
-    <div className="bg-black col-span-4  row-span-6 rounded-xl grid grid-cols-3	 items-center ">
+    <div className="bg-black col-span-4  row-span-6 rounded-xl md:grid grid-cols-3	 items-center ">
       {/* Music Summary */}
-      <div className="col-span-1 flex items-center ">
+      <div className="col-span-1 flex items-center hidden md:block">
         <img
           src="https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg"
           alt="user-icon"
@@ -27,7 +50,7 @@ export default function Player() {
       </div>
       {/* Player Settings */}
       <div className="col-span-1">
-        <div className="flex justify-between w-[20%] m-auto gap-2">
+        <div className="flex justify-between w-[20%] m-auto gap-2 mt-5 md:mt-auto">
           <FontAwesomeIcon
             icon={all.faShuffle}
             className="text-white cursor-pointer"
@@ -38,7 +61,7 @@ export default function Player() {
             className="text-white cursor-pointer"
             title="Previous"
           />
-          {played ? (
+          {isPlaying ? (
             <FontAwesomeIcon
               icon={all.faPause}
               className="text-white cursor-pointer"
@@ -68,10 +91,13 @@ export default function Player() {
         </div>
         <div className="bg-white h-[2px] mt-4 w-[70%] mx-auto">
           <div className="w-[20px] bg-red-700 h-[2px]"></div>
+          <div>
+            <audio ref={audioRef} src={`${value}`} autoPlay={isPlaying} />
+          </div>
         </div>
       </div>
       {/* Volum & Screen */}
-      <div className="col-span-1 text-white text-right ">
+      <div className="col-span-1 text-white text-right hidden md:block">
         <FontAwesomeIcon
           icon={all.faVolumeHigh}
           className="mr-5 cursor-pointer"

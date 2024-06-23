@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import { createContext, useReducer, useEffect, useContext } from "react";
 
 const MainContext = createContext();
@@ -14,7 +13,9 @@ const initialValue = {
   fullFetchedObj: {},
   channelTypes: [],
   selectedChannelType: "",
-  test: 0,
+  selectedChannelValues: [],
+  selectedChannelVoice: "",
+  selectedChannelVoiceValues: "",
 };
 
 function reducer(state, action) {
@@ -37,6 +38,12 @@ function reducer(state, action) {
       return { ...state, channelTypes: action.payload };
     case "setSelectedChannelType":
       return { ...state, selectedChannelType: action.payload };
+    case "setSelectedChannelValues":
+      return { ...state, selectedChannelValues: action.payload };
+    case "setSelectedChannelVoice":
+      return { ...state, selectedChannelVoice: action.payload };
+    case "setSelectedChannelVoiceValues":
+      return { ...state, selectedChannelVoiceValues: action.payload };
   }
 }
 
@@ -52,27 +59,29 @@ function MainProvider({ children }) {
       fullFetchedObj,
       channelTypes,
       selectedChannelType,
+      selectedChannelValues,
+      selectedChannelVoice,
+      selectedChannelVoiceValues,
     },
     dispatch,
   ] = useReducer(reducer, initialValue);
 
-  //   Get Languages
+  //   Get Languages from Puplic API
   useEffect(() => {
     // Enable Loading Spinner
     dispatch({ type: "setSpinnerStatus", payload: true });
-    const Quran = async function () {
+    const getFetchedLanguages = async function () {
       try {
         const res = await fetch("https://mp3quran.net/api/v3/languages");
+        // Throw an Error if did not fetch any value
         if (!res.ok) throw new Error("Something Went Wrong");
         const data = await res.json();
         const { language } = data;
         // Set All Fetched Objects
         dispatch({ type: "setFullFechedObjs", payload: language });
-        const all_languages = language.map((l) => l.native);
         // Set Languages to initialValue
-        dispatch({ type: "setLangs", payload: all_languages });
+        dispatch({ type: "setLangs", payload: language.map((l) => l.native) });
       } catch (error) {
-        let errorMessage = "";
         // Enable Error Popup
         dispatch({ type: "setErrorMsg", payload: error.message });
       } finally {
@@ -80,14 +89,15 @@ function MainProvider({ children }) {
         dispatch({ type: "setSpinnerStatus", payload: false });
       }
     };
-    Quran();
+    getFetchedLanguages();
   }, []);
 
   // Get Different Channels
   useEffect(() => {
+    // Condition check if the user select a language or not to continue
     if (!selectedLanguage) return;
 
-    // Filtering object by selected language
+    // Filtering objects by selected language
     const channels = fullFetchedObjs.filter(
       (lang) => lang.native === selectedLanguage
     );
@@ -96,29 +106,67 @@ function MainProvider({ children }) {
     dispatch({ type: "setFullFechedObj", payload: channels });
     const [OBJ_KEYS] = channels;
 
-    // Set Channels Type
+    // Set Channels Type [Reciters, Radios]
     dispatch({
       type: "setChannelsType",
-      payload: Object.keys(OBJ_KEYS).slice(4),
+      payload: Object.keys(OBJ_KEYS).slice(6, 8),
     });
   }, [selectedLanguage, fullFetchedObjs]);
 
-  // Get Seleted Channel Link
+  // Get Seleted Channel Values
   useEffect(() => {
+    // Condition to check if the user select a channel or not to continue
     if (!selectedChannelType) return;
-
+    // Full Selected Object
     const [obj] = fullFetchedObj;
-    const test = async function () {
+    // Enable Loading Spinner
+    dispatch({ type: "setSpinnerStatus", payload: true });
+    const selectChannel = async function () {
       try {
         const res = await fetch(`${obj[selectedChannelType]}`);
         const data = await res.json();
-        console.log(data);
+        // Set Selected Channel Value
+        dispatch({
+          type: "setSelectedChannelValues",
+          payload: data[Object.keys(data).join("")],
+        });
+      } catch (error) {
+        // Enable Error Popup
+        dispatch({ type: "setErrorMsg", payload: error.message });
+      } finally {
+        // Disable Loading Spinner
+        dispatch({ type: "setSpinnerStatus", payload: false });
+      }
+    };
+    selectChannel();
+  }, [selectedChannelType, fullFetchedObj]);
+
+  // Get Link of Selected Channel Value
+  useEffect(() => {
+    if (!selectedChannelVoice) return;
+    const [x] = selectedChannelValues.filter(
+      (l) => l.name == selectedChannelVoice
+    );
+
+    const test = async function () {
+      try {
+        // Case 01 if ther user selete Reciters
+        if (selectedChannelType === "reciters") {
+          console.log("ok");
+          const [API] = x.moshaf;
+          const res = await fetch(`${API.server}`);
+          const data = await res.json();
+          console.log(data);
+        } else {
+          dispatch({ type: "setSelectedChannelVoiceValues", payload: x.url });
+        }
       } catch {
-        console.error("error");
+        console.error();
       }
     };
     test();
-  }, [selectedChannelType, fullFetchedObj]);
+  }, [selectedChannelVoice, selectedChannelValues, selectedChannelType]);
+
   return (
     <MainContext.Provider
       value={{
@@ -131,6 +179,9 @@ function MainProvider({ children }) {
         fullFetchedObj,
         channelTypes,
         selectedChannelType,
+        selectedChannelValues,
+        selectedChannelVoice,
+        selectedChannelVoiceValues,
         dispatch,
       }}
     >
@@ -142,7 +193,7 @@ function MainProvider({ children }) {
 function useMainContext() {
   const context = useContext(MainContext);
   if (context === "undefind")
-    throw new Error("Wrong Place To Call Context API");
+    throw new Error("Wrong place to call Context API");
   return context;
 }
 

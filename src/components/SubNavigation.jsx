@@ -31,16 +31,18 @@ function SubNavigation() {
         </div> */}
 
         {/* {isLoading && <Spinner />} */}
-        {isLoading && <Spinner />}
+        {isLoading && languages.length == 0 && <Spinner />}
         {/* Select Language */}
         <ReusableTypes
           iterator={languages}
           selectedOption={selectedLanguage}
           dispatchType="setLang"
+          outContainerStyleClass={
+            "lg:w-[50%] p-2 flex overflow-x-hidden whitespace-nowrap md:w-[30%]"
+          }
         />
-
         {/* Perimum & App Installation & User Profile */}
-        <div className=" flex gap-3 items-center">
+        {/* <div className=" flex gap-3 items-center">
           <div className="bg-white p-2 rounded-3xl font-bold cursor-pointer">
             Explore Premium
           </div>
@@ -50,7 +52,7 @@ function SubNavigation() {
           <div className="bg-violet-700 p-2 rounded-full w-[40px] h-[40px] text-center font-bold text-xl cursor-pointer">
             S
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );
