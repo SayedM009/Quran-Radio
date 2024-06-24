@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import styles from "./componentsModules/ReusableTypes.module.css";
 import { useMainContext } from "../contexts/MainContext";
 
@@ -15,7 +15,7 @@ function ReusableTypes({
   boxStyleClass = "",
   iteratorTarget = "",
 }) {
-  const [isDragging, setIsDragging] = useState(false);
+  const [isDragStart, setIsDragStart] = useState(false);
   const [startX, setStartX] = useState("");
   const [startScrollLeft, setStartScrollLeft] = useState("");
   const wrapper = useRef();
@@ -39,25 +39,32 @@ function ReusableTypes({
     dispatch({ type: dispatchType, payload: String(e.target.value) });
   }
   // HandlDraging
-  function handleDragging(e) {
-    if (!isDragging) return;
-    wrapper.current.scrollLeft = startScrollLeft - (e.pageX - startX);
+  function dragging(e) {
+    if (!isDragStart) return;
+    if (!e.touches) {
+      e.preventDefault();
+      let positionDiff = e.pageX - startX;
+      wrapper.current.scrollLeft = startScrollLeft - positionDiff;
+    } else {
+      console.log(e.touches[0]);
+      let positionDiff = e.pageX - e.touches[0]?.pageX - startX;
+      console.log(wrapper.current.scrollLeft);
+      wrapper.current.scrollLeft = startScrollLeft - positionDiff;
+    }
   }
 
   // HandlStartDraging
   function handleStartDragging(e) {
-    setIsDragging(true);
-    setStartX(e.pageX);
+    setIsDragStart(true);
+    setStartX(e.pageX || e.touches[0]?.pageX);
     setStartScrollLeft(wrapper.current.scrollLeft);
   }
 
   // Handle Stop Grapping
   function handlStopping() {
-    setIsDragging(false);
+    setIsDragStart(false);
   }
-  useEffect(() => {
-    document.addEventListener("mouseup", handlStopping);
-  }, []);
+
   return (
     <>
       {iterator.length > 0 && (
@@ -66,9 +73,14 @@ function ReusableTypes({
             <h2 className={`${headingStyleClass} mt-10`}>{headingTile}</h2>
           )}
           <div
-            className={outContainerStyleClass}
-            onMouseMove={(e) => handleDragging(e)}
+            className={`${outContainerStyleClass} overflow-x-scroll md:overflow-hidden`}
+            onMouseMove={(e) => dragging(e)}
             onMouseDown={(e) => handleStartDragging(e)}
+            onMouseUp={handlStopping}
+            onMouseLeave={handlStopping}
+            onTouchMove={(e) => dragging(e)}
+            onTouchStart={(e) => handleStartDragging(e)}
+            onTouchEnd={(e) => handlStopping(e)}
             ref={wrapper}
           >
             <div className={`${innerContainerStyleClass} w-full`}>

@@ -8,7 +8,9 @@ function ErrorPopup() {
     <div
       className={`${
         isError && styles.errorIn
-      } bg-red-400	lg:w-[20rem]  border-l-[10px] border-solid border-red-600 text-black flex justify-between h-[60px] text-center items-center absolute top-10 right-[-100%]`}
+      } bg-red-400 min-w-[15rem]	md:w-[20rem]  border-l-[10px] border-solid border-red-600 text-black justify-between h-[60px] text-center items-center absolute top-10 right-[-100%]  ${
+        isError ? "flex" : "hidden"
+      }`}
     >
       <p className="ml-2">{errorMessage}</p>
       <FontAwesomeIcon

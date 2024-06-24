@@ -7,21 +7,18 @@ export default function Player() {
   const [isPlaying, setIsPlaying] = useState(true);
   const { selectedChannelVoiceValues } = useMainContext();
   const [value, setValue] = useState("");
-
-  useEffect(() => {
-    setValue(selectedChannelVoiceValues);
-  }, [selectedChannelVoiceValues]);
-
   const audioRef = useRef(null);
-
-  // const togglePlayPause = () => {
-  //   if (isPlaying) {
-  //     audioRef.current.pause();
-  //   } else {
-  //     audioRef.current.play();
-  //   }
-  //   setIsPlaying(!isPlaying);
-  // };
+  const { selectedChannelVoice, selectedChannelType } = useMainContext();
+  useEffect(() => {
+    if (!selectedChannelVoiceValues) {
+      setIsPlaying(false);
+      audioRef.current.pause();
+    } else {
+      setValue(selectedChannelVoiceValues);
+      audioRef.current.play();
+      setIsPlaying(true);
+    }
+  }, [selectedChannelVoiceValues]);
 
   // Handle Playing
   function handlePlaying() {
@@ -35,14 +32,16 @@ export default function Player() {
   return (
     <div className="bg-black col-span-4  row-span-6 rounded-xl md:grid grid-cols-3	 items-center ">
       {/* Music Summary */}
-      <div className="col-span-1 flex items-center hidden md:block">
+      <div className="col-span-1 flex items-center hidden md:flex">
         <img
           src="https://static.vecteezy.com/system/resources/thumbnails/005/129/844/small_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg"
           alt="user-icon"
           className="w-[40px] rounded-full mr-5"
         ></img>
         <div className="info">
-          <h4 className="text-white font-bold">test</h4>
+          <h4 className="text-white font-bold">
+            {selectedChannelVoice ? selectedChannelVoice : "Select a  Voice"}
+          </h4>
           <p className="text-white text-sm">
             Lorem ipsum dolor sit amet consectetur adipisicing
           </p>
@@ -55,11 +54,13 @@ export default function Player() {
             icon={all.faShuffle}
             className="text-white cursor-pointer"
             title="Random"
+            size="lg"
           />
           <FontAwesomeIcon
             icon={all.faBackwardStep}
             className="text-white cursor-pointer"
             title="Previous"
+            size="lg"
           />
           {isPlaying ? (
             <FontAwesomeIcon
@@ -67,6 +68,7 @@ export default function Player() {
               className="text-white cursor-pointer"
               title="Pause"
               onClick={handlePlaying}
+              size="lg"
             />
           ) : (
             <FontAwesomeIcon
@@ -74,6 +76,7 @@ export default function Player() {
               className="text-white cursor-pointer"
               title="Play"
               onClick={handlePlaying}
+              size="lg"
             />
           )}
           {/*  */}
@@ -82,19 +85,23 @@ export default function Player() {
             icon={all.faForwardStep}
             className="text-white cursor-pointer"
             title="Next"
+            size="lg"
           />
           <FontAwesomeIcon
             icon={all.faRepeat}
             className="text-white cursor-pointer"
             title="Repeat"
+            size="lg"
           />
         </div>
-        <div className="bg-white h-[2px] mt-4 w-[70%] mx-auto">
-          <div className="w-[20px] bg-red-700 h-[2px]"></div>
-          <div>
-            <audio ref={audioRef} src={`${value}`} autoPlay={isPlaying} />
+        {selectedChannelType !== "radios" && (
+          <div className="bg-white h-[2px] mt-4 w-[70%] mx-auto">
+            <div className="w-[20px] bg-red-700 h-[2px]"></div>
+            <div></div>
           </div>
-        </div>
+        )}
+
+        <audio ref={audioRef} src={`${value}`} autoPlay={isPlaying} />
       </div>
       {/* Volum & Screen */}
       <div className="col-span-1 text-white text-right hidden md:block">

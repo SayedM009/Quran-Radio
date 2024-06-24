@@ -38,7 +38,7 @@ function SubNavigation() {
           selectedOption={selectedLanguage}
           dispatchType="setLang"
           outContainerStyleClass={
-            "lg:w-[50%] p-2 flex overflow-x-hidden whitespace-nowrap md:w-[30%]"
+            "lg:w-[50%] p-2 flex  whitespace-nowrap md:w-[30%]"
           }
         />
         {/* Perimum & App Installation & User Profile */}

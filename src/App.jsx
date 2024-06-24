@@ -34,7 +34,7 @@ function App() {
 
   if (!languages) return;
   return (
-    <div className="h-[97vh] bg-black m-2 rounded-xl grid grid-cols-4	grid-rows-8 p-4 gap-2">
+    <div className="h-[90vh] md:h-[97vh] bg-black m-2 rounded-xl grid grid-cols-4	grid-rows-8 p-4 gap-2">
       {/* {languages.map((language, i) => (
         <Language lang={language.native} selectLang={setLanguage} key={i} />
       ))} */}

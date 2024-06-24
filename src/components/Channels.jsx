@@ -21,12 +21,12 @@ export default function Channels() {
           selectedOption={selectedChannelType}
           dispatchType="setSelectedChannelType"
           outContainerStyleClass={
-            "m-auto p-2 gap-2 flex justify-center mt-10 overflow-x-hidden whitespace-nowrap flex-wrap w-[90%] mt-5"
+            "m-auto p-2 gap-2 flex justify-center mt-10 overflow-x-scroll md:overflow-hidden whitespace-nowrap flex-wrap w-[90%] mt-5"
           }
           innerContainerStyleClass="flex justify-center"
           headingTile="Channels Type"
-          headingStyleClass="text-white w-screen font-light text-2xl ml-5 mt-10"
-          boxStyleClass="mt-5 md:h-[100px]"
+          headingStyleClass="text-white md:w-screen font-light text-2xl ml-5 mt-10"
+          boxStyleClass="mt-5 md:h-[100px] md:w-[100px]"
         />
       )}
 
@@ -40,7 +40,7 @@ export default function Channels() {
           selectedOption={selectedChannelVoice}
           dispatchType="setSelectedChannelVoice"
           outContainerStyleClass={
-            "m-auto p-2 gap-2 flex justify-center mt-10 overflow-x-hidden whitespace-nowrap flex-wrap w-[90%]"
+            "m-auto p-2 gap-2 flex justify-center mt-10  whitespace-nowrap flex-wrap w-[90%]"
           }
           headingTile={
             selectedChannelType
@@ -48,7 +48,7 @@ export default function Channels() {
                 selectedChannelType.slice(1)
               : selectedChannelType
           }
-          headingStyleClass="text-white w-screen font-light text-2xl ml-5"
+          headingStyleClass="text-white text-white md:w-screen font-light text-2xl ml-5"
           // boxStyleClass="mt-5 h-[100px]"
         />
       )}
