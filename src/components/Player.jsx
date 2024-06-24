@@ -48,8 +48,8 @@ export default function Player() {
         </div>
       </div>
       {/* Player Settings */}
-      <div className="col-span-1">
-        <div className="flex justify-between w-[20%] m-auto gap-2 mt-5 md:mt-auto">
+      <div className="md:col-span-1 flex flex-wrap justify-center">
+        <div className="flex justify-between  md:w-[20%] m-auto gap-2 mt-2 md:mt-5 md:mt-auto">
           <FontAwesomeIcon
             icon={all.faShuffle}
             className="text-white cursor-pointer"
@@ -95,7 +95,7 @@ export default function Player() {
           />
         </div>
         {selectedChannelType !== "radios" && (
-          <div className="bg-white h-[2px] mt-4 w-[70%] mx-auto">
+          <div className="bg-white h-[2px] mt-4 w-[100%] mx-auto">
             <div className="w-[20px] bg-red-700 h-[2px]"></div>
             <div></div>
           </div>

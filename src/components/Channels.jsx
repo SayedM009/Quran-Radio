@@ -25,7 +25,7 @@ export default function Channels() {
           }
           innerContainerStyleClass="flex justify-center"
           headingTile="Channels Type"
-          headingStyleClass="text-white md:w-screen font-light text-2xl ml-5 mt-10"
+          headingStyleClass="text-white md:w-screen font-light text-2xl ml-5 md:mt-[100px]"
           boxStyleClass="mt-5 md:h-[100px] md:w-[100px]"
         />
       )}

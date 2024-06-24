@@ -14,7 +14,7 @@ function SubNavigation() {
     <>
       <div className=" mx-5 mt-5 flex items-center justify-between lg:h-[60px]">
         {/* Back & Forward */}
-        {/* <div className="flex gap-2">
+        <div className=" gap-2 hidden md:flex">
           <span
             className={`${styles.arrowHover} bg-zinc-600 w-[50px] h-[50px] inline-block rounded-full flex justify-center items-center cursor-pointer`}
           >
@@ -28,7 +28,7 @@ function SubNavigation() {
               className="text-white  p-4 rounded-full"
             />
           </span>
-        </div> */}
+        </div>
 
         {/* {isLoading && <Spinner />} */}
         {isLoading && languages.length == 0 && <Spinner />}
@@ -38,11 +38,13 @@ function SubNavigation() {
           selectedOption={selectedLanguage}
           dispatchType="setLang"
           outContainerStyleClass={
-            "lg:w-[50%] p-2 flex  whitespace-nowrap md:w-[30%]"
+            "lg:w-[50%] p-2 flex  whitespace-nowrap md:w-[30%] "
           }
+          // headingTile="Languages"
+          // headingStyleClass="text-white  font-light text-2xl  mb-5"
         />
         {/* Perimum & App Installation & User Profile */}
-        {/* <div className=" flex gap-3 items-center">
+        <div className=" hidden md:flex gap-3 items-center">
           <div className="bg-white p-2 rounded-3xl font-bold cursor-pointer">
             Explore Premium
           </div>
@@ -52,7 +54,7 @@ function SubNavigation() {
           <div className="bg-violet-700 p-2 rounded-full w-[40px] h-[40px] text-center font-bold text-xl cursor-pointer">
             S
           </div>
-        </div> */}
+        </div>
       </div>
     </>
   );

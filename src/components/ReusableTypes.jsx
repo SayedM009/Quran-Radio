@@ -46,9 +46,7 @@ function ReusableTypes({
       let positionDiff = e.pageX - startX;
       wrapper.current.scrollLeft = startScrollLeft - positionDiff;
     } else {
-      console.log(e.touches[0]);
       let positionDiff = e.pageX - e.touches[0]?.pageX - startX;
-      console.log(wrapper.current.scrollLeft);
       wrapper.current.scrollLeft = startScrollLeft - positionDiff;
     }
   }
@@ -73,12 +71,12 @@ function ReusableTypes({
             <h2 className={`${headingStyleClass} mt-10`}>{headingTile}</h2>
           )}
           <div
-            className={`${outContainerStyleClass} overflow-x-scroll md:overflow-hidden`}
+            className={`${outContainerStyleClass} overflow-x-scroll md:overflow-hidden sm:overflow-x-hidden select-none	`}
             onMouseMove={(e) => dragging(e)}
             onMouseDown={(e) => handleStartDragging(e)}
             onMouseUp={handlStopping}
             onMouseLeave={handlStopping}
-            onTouchMove={(e) => dragging(e)}
+            onTouchMove={(e) => handleStartDragging(e)}
             onTouchStart={(e) => handleStartDragging(e)}
             onTouchEnd={(e) => handlStopping(e)}
             ref={wrapper}
